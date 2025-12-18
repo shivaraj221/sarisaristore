@@ -1,4 +1,4 @@
-const API = "/api";
+const API = window.location.protocol + "//" + window.location.host + "/api";
 
 /* =====================
    TOKEN & USER HELPERS
