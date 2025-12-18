@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SariSari Hub | La Salle University Ozamiz</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ================================================
+           🎨 BRAND DESIGN SYSTEM
+           Structured, Professional, Memorable
+        ================================================ */
+
+        :root {
+            /* Brand Colors - Primary Palette */
+            --brand-primary: #ef4444;
+            --brand-primary-dark: #dc2626;
+            --brand-primary-light: #fca5a5;
+            --brand-primary-pale: #fef2f2;
+            
+            /* Brand Colors - Secondary */
+            --brand-secondary: #8b5cf6;
+            --brand-accent-gold: #f59e0b;
+            --brand-accent-blue: #3b82f6;
+            --brand-accent-purple: #8b5cf6;
+            --brand-accent-green: #10b981;
+            
+            /* Neutrals - Professional Palette */
+            --neutral-900: #0f172a;
+            --neutral-800: #1e293b;
+            --neutral-700: #334155;
+            --neutral-600: #475569;
+            --neutral-500: #64748b;
+            --neutral-400: #94a3b8;
+            --neutral-300: #cbd5e1;
+            --neutral-200: #e2e8f0;
+            --neutral-100: #f1f5f9;
+            --neutral-50: #f8fafc;
+            
+            /* Brand Gradients */
+            --gradient-brand: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            --gradient-brand-soft: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%);
+            --gradient-overlay: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.8) 100%);
+            
+            /* Shadows - Depth System */
+            --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 32px rgba(239, 68, 68, 0.15);
+            --shadow-xl: 0 20px 50px rgba(239, 68, 68, 0.2);
+            --shadow-brand: 0 10px 30px rgba(239, 68, 68, 0.25);
+            
+            /* Spacing System */
+            --space-xs: 0.5rem;
+            --space-sm: 1rem;
+            --space-md: 1.5rem;
+            --space-lg: 2rem;
+            --space-xl: 3rem;
+            --space-2xl: 4rem;
+            --space-3xl: 6rem;
+            
+            /* Border Radius */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+            --radius-xl: 30px;
+            --radius-full: 9999px;
+            
+            /* Typography Scale */
+            --text-xs: 0.75rem;
+            --text-sm: 0.875rem;
+            --text-base: 1rem;
+            --text-lg: 1.125rem;
+            --text-xl: 1.25rem;
+            --text-2xl: 1.5rem;
+            --text-3xl: 2rem;
+            --text-4xl: 2.5rem;
+            --text-5xl: 3.5rem;
+        }
+
+        /* ================================================
+           🔧 GLOBAL RESET & BASE
+        ================================================ */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(180deg, #ffffff 0%, var(--neutral-50) 50%, var(--brand-primary-pale) 100%);
+            color: var(--neutral-700);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            line-height: 1.2;
+            color: var(--neutral-900);
+            letter-spacing: -0.02em;
+        }
+
+        /* ================================================
+           📐 LAYOUT STRUCTURE
+        ================================================ */
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-lg);
+        }
+
+        .section {
+            padding: var(--space-3xl) 0;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto var(--space-2xl);
+        }
+
+        .section-title {
+            font-size: var(--text-4xl);
+            margin-bottom: var(--space-md);
+        }
+
+        .section-subtitle {
+            font-size: var(--text-lg);
+            color: var(--neutral-500);
+            font-weight: 500;
+            line-height: 1.7;
+        }
+
+        .gradient-text {
+            background: var(--gradient-brand);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Brand Pattern Background */
+        .brand-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.03;
+            background-image: 
+                repeating-linear-gradient(45deg, var(--brand-primary) 0px, var(--brand-primary) 2px, transparent 2px, transparent 10px),
+                repeating-linear-gradient(-45deg, var(--brand-primary) 0px, var(--brand-primary) 2px, transparent 2px, transparent 10px);
+            pointer-events: none;
+        }
+
+        /* ================================================
+           💎 BRANDED NAVBAR
+        ================================================ */
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            box-shadow: var(--shadow-xs);
+            z-index: 1000;
+            border-bottom: 1px solid var(--neutral-200);
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            box-shadow: var(--shadow-md);
+            padding: 0.5rem 0;
+        }
+
+        .nav-wrapper {
+            padding: var(--space-sm) 0;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Brand Logo Section */
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .nav-brand:hover {
+            transform: scale(1.02);
+        }
+
+        .brand-icon-wrapper {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-brand);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-brand);
+            animation: brandPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes brandPulse {
+            0%, 100% { transform: scale(1); box-shadow: var(--shadow-brand); }
+            50% { transform: scale(1.05); box-shadow: 0 15px 40px rgba(239, 68, 68, 0.3); }
+        }
+
+        .brand-icon-wrapper i {
+            font-size: 1.75rem;
+            color: white;
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-name {
+            font-size: var(--text-2xl);
+            font-weight: 900;
+            color: var(--neutral-900);
+            letter-spacing: -0.5px;
+        }
+
+        .brand-name .highlight {
+            color: var(--brand-primary);
+        }
+
+        .brand-tagline {
+            font-size: var(--text-xs);
+            color: var(--neutral-500);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: var(--space-sm);
+        }
+
+        /* ================================================
+           🔘 BUTTON SYSTEM - Branded & Consistent
+        ================================================ */
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-xs);
+            padding: 0.875rem 2rem;
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            font-size: var(--text-base);
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid transparent;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        .btn:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border-color: var(--brand-primary);
+            color: var(--brand-primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--brand-primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-brand);
+        }
+
+        .btn-primary {
+            background: var(--gradient-brand);
+            color: white;
+            box-shadow: var(--shadow-brand);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .btn-large {
+            padding: 1.125rem 2.75rem;
+            font-size: var(--text-lg);
+        }
+
+        .btn i {
+            font-size: 1.1em;
+        }
+
+        /* ================================================
+           🚀 HERO SECTION - Brand Showcase
+        ================================================ */
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 100px;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #ffffff 0%, var(--brand-primary-pale) 100%);
+        }
+
+        /* Animated Brand Element */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            right: -15%;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(239, 68, 68, 0.12) 0%, transparent 70%);
+            animation: heroBlob 10s ease-in-out infinite;
+        }
+
+        @keyframes heroBlob {
+            0%, 100% { 
+                transform: translate(0, 0) scale(1) rotate(0deg);
+                opacity: 0.6;
+            }
+            33% { 
+                transform: translate(-50px, 30px) scale(1.1) rotate(120deg);
+                opacity: 0.4;
+            }
+            66% { 
+                transform: translate(30px, -40px) scale(0.95) rotate(240deg);
+                opacity: 0.5;
+            }
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: var(--space-2xl);
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-text {
+            animation: fadeInUp 1s ease both;
+        }
+
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        /* Brand Badge */
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            padding: 0.625rem 1.25rem;
+            background: var(--gradient-brand-soft);
+            border: 2px solid rgba(239, 68, 68, 0.15);
+            border-radius: var(--radius-full);
+            color: var(--brand-primary);
+            font-weight: 700;
+            font-size: var(--text-sm);
+            margin-bottom: var(--space-md);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        .hero-badge i {
+            font-size: 1.2em;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: var(--space-md);
+            line-height: 1.1;
+            animation: fadeInUp 1s ease 0.3s both;
+        }
+
+        .hero-description {
+            font-size: var(--text-xl);
+            color: var(--neutral-600);
+            margin-bottom: var(--space-xl);
+            line-height: 1.7;
+            max-width: 90%;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+            animation: fadeInUp 1s ease 0.5s both;
+        }
+
+        /* Hero Visual Cards */
+        .hero-visual {
+            position: relative;
+            height: 550px;
+            animation: fadeInUp 1s ease 0.6s both;
+        }
+
+        .floating-card {
+            position: absolute;
+            background: white;
+            padding: var(--space-md) var(--space-lg);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            animation: floatAnimation 5s ease-in-out infinite;
+            transition: all 0.3s ease;
+            border: 2px solid var(--neutral-100);
+        }
+
+        @keyframes floatAnimation {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+        }
+
+        .floating-card:hover {
+            transform: scale(1.08) translateY(-10px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--brand-primary);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .card-icon.gold {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            color: #f59e0b;
+        }
+
+        .card-icon.blue {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            color: #3b82f6;
+        }
+
+        .card-icon.purple {
+            background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+            color: #8b5cf6;
+        }
+
+        .card-label {
+            font-weight: 700;
+            font-size: var(--text-lg);
+            color: var(--neutral-900);
+        }
+
+        .card1 {
+            top: 8%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .card2 {
+            top: 42%;
+            right: 0;
+            animation-delay: 1s;
+        }
+
+        .card3 {
+            bottom: 12%;
+            left: 12%;
+            animation-delay: 2s;
+        }
+
+        /* ================================================
+           📦 FEATURES SECTION - Structured Grid
+        ================================================ */
+
+        .features {
+            background: linear-gradient(180deg, var(--brand-primary-pale) 0%, #ffffff 50%, var(--neutral-50) 100%);
+            position: relative;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-xl);
+        }
+
+        .feature-card {
+            background: white;
+            padding: var(--space-xl);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid var(--neutral-100);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Top Accent Bar */
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: var(--gradient-brand);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s ease;
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-12px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--brand-primary);
+        }
+
+        /* Icon Container */
+        .feature-icon-wrapper {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-brand-soft);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: var(--space-lg);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover .feature-icon-wrapper {
+            background: var(--gradient-brand);
+            transform: rotate(-5deg) scale(1.1);
+        }
+
+        .feature-icon-wrapper i {
+            font-size: 2.25rem;
+            color: var(--brand-primary);
+            transition: color 0.3s ease;
+        }
+
+        .feature-card:hover .feature-icon-wrapper i {
+            color: white;
+        }
+
+        .feature-card h3 {
+            font-size: var(--text-2xl);
+            margin-bottom: var(--space-md);
+            color: var(--neutral-900);
+        }
+
+        .feature-card p {
+            color: var(--neutral-600);
+            line-height: 1.8;
+            font-size: var(--text-base);
+        }
+
+        /* ================================================
+           🎁 PREVIEW SECTION - Product Showcase
+        ================================================ */
+
+        .preview {
+            background: linear-gradient(180deg, var(--neutral-50) 0%, #ffffff 100%);
+        }
+
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-lg);
+            margin: var(--space-2xl) 0;
+        }
+
+        .preview-card {
+            background: white;
+            padding: var(--space-xl) var(--space-lg);
+            border-radius: var(--radius-lg);
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.4s ease;
+            border: 2px solid var(--neutral-100);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .preview-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 0;
+            background: var(--gradient-brand-soft);
+            transition: height 0.4s ease;
+        }
+
+        .preview-card:hover::before {
+            height: 100%;
+        }
+
+        .preview-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--brand-primary);
+        }
+
+        .preview-icon {
+            font-size: 4rem;
+            margin-bottom: var(--space-md);
+            display: block;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.1));
+        }
+
+        .preview-card:hover .preview-icon {
+            transform: scale(1.2) rotate(10deg);
+        }
+
+        .preview-card:nth-child(1) .preview-icon { color: var(--brand-accent-gold); }
+        .preview-card:nth-child(2) .preview-icon { color: var(--brand-accent-blue); }
+        .preview-card:nth-child(3) .preview-icon { color: var(--brand-accent-purple); }
+        .preview-card:nth-child(4) .preview-icon { color: var(--brand-accent-green); }
+
+        .preview-card h4 {
+            font-size: var(--text-xl);
+            font-weight: 700;
+            color: var(--neutral-900);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* CTA Box */
+        .cta-box {
+            background: var(--gradient-brand-soft);
+            padding: var(--space-xl);
+            border-radius: var(--radius-xl);
+            text-align: center;
+            border: 2px solid rgba(239, 68, 68, 0.15);
+            margin-top: var(--space-2xl);
+        }
+
+        .cta-box p {
+            color: var(--neutral-600);
+            font-size: var(--text-lg);
+            margin-bottom: var(--space-lg);
+            font-weight: 600;
+        }
+
+        /* ================================================
+           📞 CONTACT SECTION - Brand Emphasis
+        ================================================ */
+
+        .contact-preview {
+            background: linear-gradient(180deg, #ffffff 0%, var(--brand-primary-pale) 100%);
+        }
+
+        .contact-card {
+            background: var(--gradient-brand);
+            color: white;
+            padding: var(--space-3xl);
+            border-radius: var(--radius-xl);
+            text-align: center;
+            box-shadow: var(--shadow-xl);
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Decorative Elements */
+        .contact-card::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .contact-card::after {
+            content: '';
+            position: absolute;
+            bottom: -80px;
+            left: -80px;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .contact-card h2 {
+            font-size: var(--text-4xl);
+            margin-bottom: var(--space-xl);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-md);
+            position: relative;
+            z-index: 1;
+            color: white;
+        }
+
+        .contact-card h2 i {
+            animation: brandPulse 3s ease-in-out infinite;
+        }
+
+        .contact-grid {
+            display: grid;
+            gap: var(--space-md);
+            margin-bottom: var(--space-xl);
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-md);
+            background: rgba(255, 255, 255, 0.15);
+            padding: var(--space-lg);
+            border-radius: var(--radius-lg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateX(8px);
+        }
+
+        .contact-item i {
+            font-size: var(--text-2xl);
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .contact-item span {
+            font-size: var(--text-lg);
+            font-weight: 600;
+        }
+
+        .contact-note {
+            background: rgba(255, 255, 255, 0.2);
+            padding: var(--space-lg);
+            border-radius: var(--radius-lg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-note p {
+            font-size: var(--text-lg);
+            font-weight: 700;
+            margin: 0;
+        }
+
+        /* ================================================
+           🦶 FOOTER - Brand Closure
+        ================================================ */
+
+        .store-footer {
+            background: var(--neutral-900);
+            color: white;
+            padding: var(--space-3xl) 0 var(--space-lg);
+            border-top: 5px solid var(--brand-primary);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-xl);
+            padding-bottom: var(--space-xl);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-brand-section {
+            max-width: 400px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            margin-bottom: var(--space-md);
+        }
+
+        .footer-logo-icon {
+            width: 55px;
+            height: 55px;
+            background: var(--gradient-brand);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-brand);
+        }
+
+        .footer-logo-icon i {
+            font-size: var(--text-2xl);
+            color: white;
+        }
+
+        .footer-logo h2 {
+            font-size: var(--text-2xl);
+            color: white;
+        }
+
+        .footer-logo span {
+            color: var(--brand-primary);
+        }
+
+        .footer-tagline {
+            color: var(--neutral-400);
+            font-size: var(--text-base);
+            margin-bottom: var(--space-sm);
+        }
+
+        .footer-slogan {
+            color: var(--neutral-500);
+            font-size: var(--text-sm);
+            font-style: italic;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: var(--space-md);
+        }
+
+        .social-link {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: var(--text-xl);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .social-link:hover {
+            background: var(--brand-primary);
+            transform: translateY(-5px);
+            border-color: var(--brand-primary);
+            box-shadow: var(--shadow-brand);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: var(--space-lg);
+            color: var(--neutral-400);
+        }
+
+        .footer-bottom p {
+            margin-bottom: var(--space-xs);
+            font-size: var(--text-sm);
+        }
+
+        /* ================================================
+           📱 RESPONSIVE DESIGN
+        ================================================ */
+
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: var(--space-xl);
+            }
+
+            .hero-visual {
+                height: 450px;
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .preview-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --text-5xl: 2.5rem;
+                --text-4xl: 2rem;
+            }
+
+            .container {
+                padding: 0 var(--space-md);
+            }
+
+            .section {
+                padding: var(--space-2xl) 0;
+            }
+
+            .nav-actions {
+                flex-direction: column;
+                width: 100%;
+                gap: var(--space-xs);
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .brand-text {
+                display: none;
+            }
+
+            .hero-visual {
+                height: 380px;
+            }
+
+            .floating-card {
+                padding: var(--space-sm) var(--space-md);
+            }
+
+            .card-label {
+                font-size: var(--text-base);
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: var(--space-lg);
+            }
+
+            .preview-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+                gap: var(--space-xl);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .card-icon {
+                width: 45px;
+                height: 45px;
+                font-size: 1.5rem;
+            }
+
+            .floating-card {
+                font-size: var(--text-sm);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="nav-content">
+                    <div class="nav-brand">
+                        <div class="brand-icon-wrapper">
+                            <i class="fas fa-store-alt"></i>
+                        </div>
+                        <div class="brand-text">
+                            <div class="brand-name">Sari<span class="highlight">Sari</span> Hub</div>
+                            <div class="brand-tagline">LSU Ozamiz</div>
+                        </div>
+                    </div>
+                    <div class="nav-actions">
+                        <a href="{% url 'login' %}" class="btn btn-outline">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </a>
+                        <a href="{% url 'register' %}" class="btn btn-primary">
+                            <i class="fas fa-user-plus"></i> Register
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <div class="hero-badge">
+                        <i class="fas fa-graduation-cap"></i>
+                        LSU Ozamiz Student Business
+                    </div>
+                    <h1 class="hero-title">
+                        Your Campus Store,<br>
+                        <span class="gradient-text">Reimagined</span>
+                    </h1>
+                    <p class="hero-description">
+                        Welcome to SariSari Hub – where affordability meets convenience. 
+                        Everything you need for campus life, all in one place.
+                    </p>
+                    <div class="hero-buttons">
+                        <a href="{% url 'login' %}" class="btn btn-primary btn-large">
+                            <i class="fas fa-sign-in-alt"></i> Get Started
+                        </a>
+                        <a href="{% url 'register' %}" class="btn btn-outline btn-large">
+                            <i class="fas fa-user-plus"></i> Create Account
+                        </a>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="floating-card card1">
+                        <div class="card-icon gold">
+                            <i class="fas fa-cookie-bite"></i>
+                        </div>
+                        <div class="card-label">Snacks & Treats</div>
+                    </div>
+                    <div class="floating-card card2">
+                        <div class="card-icon blue">
+                            <i class="fas fa-wine-bottle"></i>
+                        </div>
+                        <div class="card-label">Fresh Drinks</div>
+                    </div>
+                    <div class="floating-card card3">
+                        <div class="card-icon purple">
+                            <i class="fas fa-pen-fancy"></i>
+                        </div>
+                        <div class="card-label">Stationery</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features section">
+        <div class="brand-pattern"></div>
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title gradient-text">Why Students Choose Us</h2>
+                <p class="section-subtitle">
+                    Login to unlock your personalized shopping experience and exclusive student perks
+                </p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <i class="fas fa-shopping-basket"></i>
+                    </div>
+                    <h3>Complete Catalog</h3>
+                    <p>Browse our extensive collection of snacks, drinks, stationery, and essentials with exclusive student pricing.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3>Share Feedback</h3>
+                    <p>Your voice matters! Help us improve by sharing your thoughts and suggestions about our products.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <i class="fas fa-history"></i>
+                    </div>
+                    <h3>Track History</h3>
+                    <p>Keep track of all your feedback submissions and see how we've implemented your suggestions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Preview Section -->
+    <section class="preview section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title gradient-text">What's in Store?</h2>
+                <p class="section-subtitle">
+                    A preview of our most popular categories – login to explore the full collection
+                </p>
+            </div>
+            
+            <div class="preview-grid">
+                <div class="preview-card">
+                    <i class="fas fa-cookie-bite preview-icon"></i>
+                    <h4>Snacks & Treats</h4>
+                </div>
+                
+                <div class="preview-card">
+                    <i class="fas fa-wine-bottle preview-icon"></i>
+                    <h4>Beverages</h4>
+                </div>
+                
+                <div class="preview-card">
+                    <i class="fas fa-pen preview-icon"></i>
+                    <h4>Stationery</h4>
+                </div>
+                
+                <div class="preview-card">
+                    <i class="fas fa-utensils preview-icon"></i>
+                    <h4>Meals</h4>
+                </div>
+            </div>
+            
+            <div class="cta-box">
+                <p>✨ And hundreds more items waiting for you!</p>
+                <a href="{% url 'login' %}" class="btn btn-primary btn-large">
+                    <i class="fas fa-unlock"></i> Unlock Full Access
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-preview section">
+        <div class="container">
+            <div class="contact-card">
+                <h2><i class="fas fa-headset"></i> We're Here to Help</h2>
+                <div class="contact-grid">
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span><strong>Call:</strong> 0912-345-6789</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span><strong>Visit:</strong> Student Center, LSU Ozamiz</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-clock"></i>
+                        <span><strong>Hours:</strong> Mon-Fri: 8AM-7PM | Sat: 9AM-5PM</span>
+                    </div>
+                </div>
+                <div class="contact-note">
+                    <p>💡 Login to access our full store and feedback system</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="store-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand-section">
+                    <div class="footer-logo">
+                        <div class="footer-logo-icon">
+                            <i class="fas fa-store-alt"></i>
+                        </div>
+                        <h2>Sari<span>Sari</span> Hub</h2>
+                    </div>
+                    <p class="footer-tagline">La Salle University Ozamiz Student Business</p>
+                    <p class="footer-slogan">"Your Campus, Your Store, Your Hub"</p>
+                </div>
+                <div class="footer-social">
+                    <a href="#" class="social-link" aria-label="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="social-link" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="social-link" aria-label="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; <span id="year">2024</span> SariSari Hub. All Rights Reserved.</p>
+                <p>🔒 Login required to access all features</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Enhanced JavaScript for Brand Experience
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update copyright year
+            document.getElementById('year').textContent = new Date().getFullYear();
+            
+            // Navbar scroll effect
+            const navbar = document.getElementById('navbar');
+            let lastScroll = 0;
+            
+            window.addEventListener('scroll', () => {
+                const currentScroll = window.pageYOffset;
+                
+                if (currentScroll > 100) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+                
+                lastScroll = currentScroll;
+            });
+            
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+            
+            // Add intersection observer for fade-in animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe all cards for animation
+            document.querySelectorAll('.feature-card, .preview-card').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>

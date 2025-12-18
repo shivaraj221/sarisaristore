@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store | Sari-Sari - LSU Ozamiz</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <style>
+        /* Additional CSS for centered AI feedback form */
+        .feedback-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 500px;
+        }
+        
+        .feedback-form-centered {
+            max-width: 800px;
+            width: 100%;
+            background: white;
+            border-radius: 24px;
+            padding: 3.5rem;
+            box-shadow: 0 20px 60px rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.1);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .feedback-form-centered::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+        
+        .ai-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        
+        .ai-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .ai-icon i {
+            font-size: 2.5rem;
+            color: #ef4444;
+        }
+        
+        .ai-title {
+            font-size: 2.2rem;
+            color: #0f172a;
+            margin-bottom: 0.75rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .ai-subtitle {
+            color: #64748b;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        #feedback-text {
+            width: 100%;
+            min-height: 200px;
+            padding: 1.5rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #334155;
+            resize: vertical;
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+            background: #f8fafc;
+        }
+        
+        #feedback-text:focus {
+            outline: none;
+            border-color: #ef4444;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+            background: white;
+        }
+        
+        #feedback-text::placeholder {
+            color: #94a3b8;
+        }
+        
+        .ai-features {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.25rem;
+            background: #fef2f2;
+            border-radius: 50px;
+            color: #ef4444;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-item:hover {
+            background: #fee2e2;
+            transform: translateY(-2px);
+        }
+        
+        .feature-item i {
+            font-size: 1.1rem;
+        }
+        
+        .ai-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .char-count {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        
+        .char-count i {
+            color: #ef4444;
+        }
+        
+        .btn-large {
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .feedback-form-centered {
+                padding: 2rem;
+            }
+            
+            .ai-title {
+                font-size: 1.8rem;
+            }
+            
+            .ai-features {
+                gap: 1rem;
+            }
+            
+            .feature-item {
+                padding: 0.5rem 1rem;
+                font-size: 0.85rem;
+            }
+            
+            .ai-footer {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .btn-large {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Store Header -->
+    <header class="store-header">
+        <div class="container">
+            <div class="store-nav">
+                <div class="store-brand">
+                    <i class="fas fa-store"></i>
+                    <div>
+                        <h1>Sari<span>-Sari</span></h1>
+                        <p class="store-subtitle">La Salle University Ozamiz</p>
+                    </div>
+                </div>
+                
+                <div class="store-user">
+                    <div class="user-info">
+                        <div class="user-avatar" id="user-avatar">U</div>
+                        <div class="user-details">
+                            <span class="user-name" id="user-name">User</span>
+                            <span class="user-status">● Online</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-logout" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Store Hero -->
+    <section class="store-hero">
+        <div class="container">
+            <div class="hero-message">
+                <h2 class="gradient-text" id="welcome-message">Welcome to Your Campus Store! 🎉</h2>
+                <p>Browse products, share feedback, and help us improve</p>
+            </div>
+            <div class="store-stats">
+                <div class="stat-card">
+                    <i class="fas fa-box"></i>
+                    <div>
+                        <h3 id="product-count">0</h3>
+                        <p>Products Available</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-comments"></i>
+                    <div>
+                        <h3 id="feedback-count">0</h3>
+                        <p>Your Feedbacks</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title gradient-text">Our Products</h2>
+                <div class="category-filter">
+                    <button class="category-btn active" onclick="filterProducts('all')">All Products</button>
+                    <button class="category-btn" onclick="filterProducts('snacks')">Snacks</button>
+                    <button class="category-btn" onclick="filterProducts('drinks')">Drinks</button>
+                    <button class="category-btn" onclick="filterProducts('stationery')">Stationery</button>
+                    <button class="category-btn" onclick="filterProducts('meals')">Meals</button>
+                </div>
+            </div>
+            
+            <div class="products-grid" id="products-grid">
+                <!-- Products will be loaded by JavaScript -->
+            </div>
+        </div>
+    </section>
+    
+    <!-- Feedback Section -->
+    <section class="feedback-section">
+        <div class="container">
+            <h2 class="section-title gradient-text">Share Your Feedback</h2>
+            <p class="section-subtitle">Your thoughts help us improve our store</p>
+            
+            <div class="feedback-container">
+                <!-- AI-Powered Feedback Analysis - Centered -->
+                <div class="feedback-form-centered">
+                    <div class="ai-header">
+                        <div class="ai-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3 class="ai-title">AI-Powered Feedback Analysis</h3>
+                        <p class="ai-subtitle">Your feedback is analyzed by AI to provide better insights and help us improve your campus store experience.</p>
+                    </div>
+                    
+                    <textarea id="feedback-text" 
+                              placeholder="What do you like about our store? What can we improve? Share your thoughts..."
+                              maxlength="500"></textarea>
+                    
+                    <div class="ai-features">
+                        <div class="feature-item">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Sentiment Analysis</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-lightbulb"></i>
+                            <span>Smart Insights</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-tags"></i>
+                            <span>Topic Detection</span>
+                        </div>
+                    </div>
+                    
+                    <div class="ai-footer">
+                        <div class="char-count">
+                            <i class="fas fa-text-height"></i>
+                            <span id="char-counter">0</span>/500 characters
+                        </div>
+                        <button class="btn btn-primary btn-large" onclick="submitFeedback()">
+                            <i class="fas fa-paper-plane"></i> Analyze & Submit Feedback
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="store-contact">
+        <div class="container">
+            <h2 class="section-title gradient-text">Contact Us</h2>
+            <p class="section-subtitle">We're here to help</p>
+            
+            <div class="contact-wrapper">
+                <div class="contact-info">
+                    <div class="contact-card">
+                        <h3><i class="fas fa-headset"></i> Get in Touch</h3>
+                        <div class="contact-details">
+                            <div class="contact-item">
+                                <i class="fas fa-phone"></i>
+                                <div>
+                                    <h4>Call Us</h4>
+                                    <p>0912-345-6789</p>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <div>
+                                    <h4>Location</h4>
+                                    <p>Student Center<br>La Salle University Ozamiz</p>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-clock"></i>
+                                <div>
+                                    <h4>Business Hours</h4>
+                                    <p>Mon-Fri: 8:00 AM - 7:00 PM<br>Saturday: 9:00 AM - 5:00 PM</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-form-card">
+                        <h3><i class="fas fa-envelope"></i> Send Message</h3>
+                        <form class="contact-form" onsubmit="submitContactForm(); return false;">
+                            <input type="text" id="contact-name" placeholder="Your Name" required>
+                            <input type="email" id="contact-email" placeholder="Your Email" required>
+                            <textarea id="contact-message" placeholder="Your Message" required></textarea>
+                            <button type="submit" class="btn btn-secondary btn-block">
+                                <i class="fas fa-paper-plane"></i> Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WhatsApp Float Button -->
+    <a href="javascript:void(0)" onclick="openWhatsApp()" class="whatsapp-float">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- Footer -->
+    <footer class="store-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <i class="fas fa-store"></i>
+                        <h2>Sari<span>-Sari</span></h2>
+                    </div>
+                    <p class="tagline">La Salle University Ozamiz Student Business</p>
+                </div>
+                <div class="footer-social">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Sari-Sari Store. All rights reserved. | A Student Business Initiative</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{% static 'app.js' %}"></script>
+    <script>
+        // Character counter for feedback textarea
+        document.addEventListener('DOMContentLoaded', function() {
+            const feedbackText = document.getElementById('feedback-text');
+            const charCounter = document.getElementById('char-counter');
+            
+            if (feedbackText && charCounter) {
+                feedbackText.addEventListener('input', function() {
+                    charCounter.textContent = this.value.length;
+                });
+            }
+        });
+    </script>
+</body>
+</html>
