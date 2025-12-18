@@ -1,4 +1,18 @@
-const API = window.location.protocol + "//" + window.location.host + "/api";
+// app.js - BULLETPROOF VERSION WITH DJANGO API INTEGRATION
+
+/* =====================
+   API URL CONFIGURATION
+   With environment detection
+===================== */
+let API;
+if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    API = "/api";  // Local development
+} else {
+    // Replace with your Render URL
+    API = "https://sarisaristore-7cip.onrender.com/api";  // Render deployment
+}
+
+console.log(`🌐 Using API endpoint: ${API}`);
 
 /* =====================
    TOKEN & USER HELPERS
@@ -27,6 +41,44 @@ function clearToken() {
 
 function getCurrentUser() {
     return localStorage.getItem("username") || 'Student';
+}
+
+/* =====================
+   SAFE JSON FETCH HELPER
+   Prevents "Unexpected token '<'" errors
+===================== */
+async function safeFetch(url, options = {}) {
+    try {
+        const response = await fetch(url, options);
+        
+        // Check if response is JSON
+        const contentType = response.headers.get("content-type");
+        const isJson = contentType && contentType.includes("application/json");
+        
+        if (!isJson) {
+            const text = await response.text();
+            console.error(`❌ Server returned non-JSON response from ${url}:`, text.substring(0, 200));
+            
+            // Check if it's HTML (common error)
+            if (text.trim().startsWith('<!DOCTYPE') || text.trim().startsWith('<html')) {
+                throw new Error(`Server returned HTML instead of JSON. Check if URL is correct: ${url}`);
+            }
+            
+            throw new Error(`Server error: Expected JSON but got ${contentType || 'unknown format'}`);
+        }
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.detail || data.message || data.error || `Request failed with status ${response.status}`);
+        }
+        
+        return { success: true, data, response };
+        
+    } catch (error) {
+        console.error(`Fetch error for ${url}:`, error);
+        return { success: false, error: error.message };
+    }
 }
 
 /* =====================
@@ -94,13 +146,15 @@ function checkAuth() {
     const token = getToken();
     const currentPath = window.location.pathname;
 
+    // Pages that require authentication
     if (!token && currentPath.includes('/store/')) {
         showNotification('Please login to access the store', 'info');
         setTimeout(() => window.location.href = "/login/", 1000);
         return;
     }
 
-    if (token && (currentPath.includes('/login/') || currentPath.includes('/register/'))) {
+    // If already logged in, redirect from auth pages to store
+    if (token && (currentPath === '/login/' || currentPath === '/register/' || currentPath === '/')) {
         setTimeout(() => window.location.href = "/store/", 500);
         return;
     }
@@ -154,7 +208,7 @@ function togglePassword(id) {
 }
 
 /* =====================
-   REGISTER FUNCTION - UPDATED FOR DJANGO
+   REGISTER FUNCTION - BULLETPROOF VERSION
 ===================== */
 async function register() {
     const username = document.getElementById("reg-username").value.trim();
@@ -166,6 +220,11 @@ async function register() {
         return;
     }
 
+    if (password.length < 6) {
+        showNotification('Password must be at least 6 characters', 'error');
+        return;
+    }
+
     // Show loading state
     const btn = document.querySelector('.btn-primary');
     const originalText = btn.innerHTML;
@@ -173,24 +232,27 @@ async function register() {
     btn.disabled = true;
 
     try {
-        const res = await fetch(`${API}/register/`, {
+        console.log(`📤 Sending register request to: ${API}/register/`);
+        
+        const result = await safeFetch(`${API}/register/`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username, email, password })
         });
 
-        if (!res.ok) {
-            const error = await res.json();
-            throw new Error(error.detail || error.message || 'Registration failed');
+        if (!result.success) {
+            throw new Error(result.error);
         }
 
         showNotification('🎉 Account created successfully! Redirecting to login...', 'success');
+        
         setTimeout(() => {
-            window.location.href = "/login/";  // Changed to Django URL
+            window.location.href = "/login/";
         }, 2000);
 
     } catch (error) {
         showNotification(error.message, 'error');
+        console.error("Registration error details:", error);
     } finally {
         btn.innerHTML = originalText;
         btn.disabled = false;
@@ -198,7 +260,7 @@ async function register() {
 }
 
 /* =====================
-   LOGIN FUNCTION - UPDATED FOR DJANGO
+   LOGIN FUNCTION - BULLETPROOF VERSION
 ===================== */
 async function login() {
     const username = document.getElementById("login-username").value.trim();
@@ -216,27 +278,28 @@ async function login() {
     btn.disabled = true;
 
     try {
-        const res = await fetch(`${API}/login/`, {
+        console.log(`📤 Sending login request to: ${API}/login/`);
+        
+        const result = await safeFetch(`${API}/login/`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username, password })
         });
 
-        const data = await res.json();
-
-        if (!res.ok) {
-            throw new Error(data.detail || data.message || 'Invalid credentials');
+        if (!result.success) {
+            throw new Error(result.error);
         }
 
-        setToken(data.token);
+        setToken(result.data.token);
         showNotification('🎉 Welcome back! Redirecting to store...', 'success');
 
         setTimeout(() => {
-            window.location.href = "/store/";  // Changed to Django URL
+            window.location.href = "/store/";
         }, 1500);
 
     } catch (error) {
         showNotification(error.message, 'error');
+        console.error("Login error details:", error);
     } finally {
         btn.innerHTML = originalText;
         btn.disabled = false;
@@ -250,12 +313,12 @@ function logout() {
     showNotification('👋 Logged out successfully', 'info');
     clearToken();
     setTimeout(() => {
-        window.location.href = "/";  // Redirect to home page
+        window.location.href = "/";
     }, 1500);
 }
 
 /* =====================
-   PRODUCTS DATA WITH ANIMATED ICONS - UPDATED
+   PRODUCTS DATA WITH ANIMATED ICONS
 ===================== */
 const products = [
     {
@@ -537,7 +600,7 @@ function filterProducts(category) {
 }
 
 /* =====================
-   SUBMIT FEEDBACK
+   SUBMIT FEEDBACK - BULLETPROOF VERSION
 ===================== */
 async function submitFeedback() {
     const message = document.getElementById("feedback-text").value.trim();
@@ -550,6 +613,7 @@ async function submitFeedback() {
 
     if (!token) {
         showNotification('Please login to submit feedback', 'error');
+        setTimeout(() => window.location.href = "/login/", 1000);
         return;
     }
 
@@ -559,7 +623,9 @@ async function submitFeedback() {
     btn.disabled = true;
 
     try {
-        const res = await fetch(`${API}/feedback/`, {
+        console.log(`📤 Sending feedback to: ${API}/feedback/`);
+        
+        const result = await safeFetch(`${API}/feedback/`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -568,8 +634,8 @@ async function submitFeedback() {
             body: JSON.stringify({ message })
         });
 
-        if (!res.ok) {
-            throw new Error('Failed to submit feedback');
+        if (!result.success) {
+            throw new Error(result.error);
         }
 
         document.getElementById("feedback-text").value = "";
@@ -579,6 +645,7 @@ async function submitFeedback() {
 
     } catch (error) {
         showNotification(error.message, 'error');
+        console.error("Feedback error details:", error);
     } finally {
         btn.innerHTML = originalText;
         btn.disabled = false;
@@ -593,17 +660,30 @@ async function loadFeedbacks() {
     const feedbacksContainer = document.getElementById("feedback-list");
     
     if (!feedbacksContainer) return;
+    
+    if (!token) {
+        feedbacksContainer.innerHTML = `
+            <div class="no-feedback">
+                <i class="fas fa-lock"></i>
+                <h4>Login to view feedback</h4>
+                <p>Please login to see community feedback</p>
+            </div>
+        `;
+        return;
+    }
 
     try {
-        const res = await fetch(`${API}/feedback/`, {
+        console.log(`📥 Loading feedbacks from: ${API}/feedback/`);
+        
+        const result = await safeFetch(`${API}/feedback/`, {
             headers: { "Authorization": `Token ${token}` }
         });
 
-        if (!res.ok) {
-            throw new Error('Failed to load feedbacks');
+        if (!result.success) {
+            throw new Error(result.error);
         }
 
-        const data = await res.json();
+        const data = result.data;
         feedbacksContainer.innerHTML = '';
 
         if (data.length === 0) {
@@ -686,9 +766,10 @@ async function loadFeedbacks() {
             <div class="no-feedback">
                 <i class="fas fa-exclamation-circle"></i>
                 <h4>Failed to load feedbacks</h4>
-                <p>Please try again later</p>
+                <p>${error.message}</p>
             </div>
         `;
+        console.error("Load feedbacks error details:", error);
     }
 }
 
@@ -706,9 +787,24 @@ function updateCharCount() {
 }
 
 /* =====================
+   DEBUG HELPER - List all API endpoints
+===================== */
+function debugAPIEndpoints() {
+    console.log('🔍 API Endpoints:');
+    console.log(`  • Register: ${API}/register/`);
+    console.log(`  • Login: ${API}/login/`);
+    console.log(`  • Feedback: ${API}/feedback/`);
+    console.log(`  • Current token: ${getToken() ? '✓ Present' : '✗ Missing'}`);
+    console.log(`  • Current user: ${getCurrentUser()}`);
+}
+
+/* =====================
    INITIALIZE PAGE WITH ANIMATIONS
 ===================== */
 function initializePage() {
+    console.log('🚀 Initializing page...');
+    debugAPIEndpoints();
+    
     // Check authentication
     checkAuth();
     
@@ -739,3 +835,4 @@ window.filterProducts = filterProducts;
 window.openWhatsApp = openWhatsApp;
 window.sendOrderWhatsApp = sendOrderWhatsApp;
 window.updateCharCount = updateCharCount;
+window.debugAPIEndpoints = debugAPIEndpoints; // For debugging
