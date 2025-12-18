@@ -9,32 +9,22 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Build paths
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings
-SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-6gt0-2d*y^z)y(7&4!2fnof%b)+y0*_nry)*zg*csurb#jt*ft')
+# Security
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-fallback-key-here')
 
-# SECURITY WARNING: don't run with debug turned on in production!
+# DEBUG - False in production
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-# ALLOWED_HOSTS configuration
-ALLOWED_HOSTS = ["*"]
-
-# Add localhost for development
-if DEBUG:
-    ALLOWED_HOSTS.extend(['localhost', '127.0.0.1'])
+# ALLOWED_HOSTS
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.onrender.com']
 
 # Add Render hostname
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
-
-# Allow all .onrender.com domains
-ALLOWED_HOSTS.append('.onrender.com')
-
-# If you want to allow all hosts temporarily (not recommended for production)
-# ALLOWED_HOSTS = ['*']  # Remove this line for production
 
 # Application definition
 INSTALLED_APPS = [
@@ -50,12 +40,12 @@ INSTALLED_APPS = [
     'corsheaders',
 ]
 
-# Middleware - IMPORTANT: Whitenoise must be after SecurityMiddleware and before all others
+# Middleware - IMPORTANT ORDER
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # Correct position
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Add this
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',  # CorsMiddleware should be before CommonMiddleware
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -63,38 +53,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# CORS settings
-CORS_ALLOW_ALL_ORIGINS = True  # Allow all for now, can restrict later
-CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5500",
-    "http://127.0.0.1:5500",
-    "http://localhost:8000",
-    "https://sarisaristore-7cip.onrender.com",
-    "https://*.onrender.com",
-]
-
-# Security settings for production
-if not DEBUG:
-    SECURE_SSL_REDIRECT = True
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-
-# REST Framework settings
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-    ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
-    ],
-    'DEFAULT_TIMEOUT': 30,
-}
-
-# LangGraph/OpenAI settings
-OPENROUTER_API_KEY = os.getenv('OPENROUTER_API_KEY')
+# CORS
+CORS_ALLOW_ALL_ORIGINS = True  # For development
 
 ROOT_URLCONF = 'main.urls'
 
@@ -116,12 +76,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'main.wsgi.application'
 
-# Database - Render PostgreSQL
+# Database
 DATABASES = {
     'default': dj_database_url.config(
         default='sqlite:///db.sqlite3',
-        conn_max_age=600,
-        ssl_require=not DEBUG  # SSL required in production
+        conn_max_age=600
     )
 }
 
@@ -147,46 +106,45 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
+# ============================================
+# STATIC FILES FIX
+# ============================================
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
 
-# WhiteNoise configuration
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-WHITENOISE_MANIFEST_STRICT = False  # Allow missing files in development
+if DEBUG:
+    # Development - simple static serving
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+    STATIC_ROOT = None
+else:
+    # Production - use WhiteNoise
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+    
+    # Use simpler storage for now
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+    
+    # Add this for WhiteNoise
+    WHITENOISE_ROOT = os.path.join(BASE_DIR, 'staticfiles', 'root')
 
-# Media files (if you have user uploads)
+# Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Logging configuration
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'root': {
-        'handlers': ['console'],
-        'level': 'INFO',
-    },
-}
+# Security for production
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
 
-# CSRF settings for Render
+# CSRF trusted origins
 CSRF_TRUSTED_ORIGINS = [
-    'https://sarisaristore-7cip.onrender.com',
+    'https://sarisaristore-2.onrender.com',
     'https://*.onrender.com',
 ]
-
-# Session settings
-SESSION_ENGINE = 'django.contrib.sessions.backends.db'
-SESSION_COOKIE_AGE = 1209600  # 2 weeks in seconds
-SESSION_SAVE_EVERY_REQUEST = True
