@@ -103,20 +103,20 @@ TEMPLATES = [
 WSGI_APPLICATION = 'main.wsgi.application'
 
 
-# Database - UPDATED FOR POSTGRESQL
-# ================================
-# Use dj_database_url to read DATABASE_URL environment variable
+# Database - FIXED VERSION FOR POSTGRESQL
+# ========================================
+
+# Default configuration (local development with SQLite)
 DATABASES = {
-    'default': dj_database_url.config(
-        default='sqlite:///' + str(BASE_DIR / 'db.sqlite3'),
-        conn_max_age=600,
-        conn_health_checks=True,
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',  # ✅ EXPLICIT ENGINE
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
 
 # Auto-switch to PostgreSQL on Render
 if 'RENDER' in os.environ or 'DATABASE_URL' in os.environ:
-    # Force PostgreSQL configuration for Render
+    # Render provides DATABASE_URL - use it
     DATABASES['default'] = dj_database_url.config(
         conn_max_age=600,
         conn_health_checks=True,
@@ -183,8 +183,9 @@ if DEBUG:
 else:
     # Production on Render - ADD YOUR NEW URL
     ALLOWED_HOSTS = [
-        'sarisaristore-11.onrender.com',  # ✅ Your NEW Render URL
-        'sari-sari-6.onrender.com',       # Your previous URL
+        'sarisaristore-12.onrender.com',  # ✅ YOUR CURRENT URL
+        'sarisaristore-11.onrender.com',
+        'sari-sari-6.onrender.com',
         '.onrender.com',                   # All Render subdomains
     ]
 
