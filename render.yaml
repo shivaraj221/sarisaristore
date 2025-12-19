@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: sarisari-store
+    name: sarisari-store  # Web service name (can stay)
     env: python
     buildCommand: |
       pip install -r requirements.txt
@@ -8,11 +8,13 @@ services:
       python manage.py collectstatic --noinput
     startCommand: gunicorn main.wsgi:application --bind 0.0.0.0:$PORT
     envVars:
+      - key: PYTHON_VERSION  # ← ADD THIS
+        value: 3.11.0
       - key: SECRET_KEY
         generateValue: true
       - key: DEBUG
-        value: false
+        value: "True"  # ← Change to "True" temporarily for debugging
       - key: DATABASE_URL
         fromDatabase:
-          name: sarisari-db  # Your PostgreSQL database name
+          name: sari-sari-db  # ← MUST MATCH YOUR ACTUAL POSTGRESQL NAME
           property: connectionString
