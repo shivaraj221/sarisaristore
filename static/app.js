@@ -4,14 +4,7 @@
    API URL CONFIGURATION
    With environment detection
 ===================== */
-let API;
-if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-    API = "/api";  // Local development
-} else {
-    // Replace with your Render URL
-    API = "https://sarisaristore-7cip.onrender.com/api";  // Render deployment
-}
-
+const API = "/api";  // ✅ ALWAYS use relative URL - works everywhere
 console.log(`🌐 Using API endpoint: ${API}`);
 
 /* =====================
