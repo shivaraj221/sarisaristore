@@ -155,13 +155,18 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.2/howto/static-files/
-
+# Static files (CSS, JavaScript, Images) - FIXED VERSION
+# ======================================================
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']  # Fixed path
+STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# ✅ FIXED: Changed from CompressedManifestStaticFilesStorage
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+
+# ✅ ADD: WhiteNoise settings to fix manifest error
+WHITENOISE_USE_FINDERS = True
+WHITENOISE_MANIFEST_STRICT = False
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -169,17 +174,18 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# Security and Host Configuration
-# ===============================
+# Security and Host Configuration - UPDATED WITH YOUR NEW URL
+# ============================================================
 
 # ALLOWED_HOSTS configuration
 if DEBUG:
     ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
 else:
-    # Production on Render
+    # Production on Render - ADD YOUR NEW URL
     ALLOWED_HOSTS = [
-        'sari-sari-6.onrender.com',  # Your current Render URL
-        '.onrender.com',              # All Render subdomains
+        'sarisaristore-11.onrender.com',  # ✅ Your NEW Render URL
+        'sari-sari-6.onrender.com',       # Your previous URL
+        '.onrender.com',                   # All Render subdomains
     ]
 
 # Security settings for production
