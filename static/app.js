@@ -211,100 +211,69 @@ function togglePassword(id) {
    REGISTER FUNCTION - BULLETPROOF VERSION
 ===================== */
 async function register() {
-    const username = document.getElementById("reg-username").value.trim();
-    const email = document.getElementById("reg-email").value.trim();
-    const password = document.getElementById("reg-password").value;
+  const username = document.getElementById("reg-username").value;
+  const email = document.getElementById("reg-email").value;
+  const password = document.getElementById("reg-password").value;
 
-    if (!username || !email || !password) {
-        showNotification('Please fill in all fields', 'error');
-        return;
-    }
+  const response = await fetch("/api/register/", {
+    method: "POST",                         // 🔴 REQUIRED
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      username,
+      email,
+      password
+    })
+  });
 
-    if (password.length < 6) {
-        showNotification('Password must be at least 6 characters', 'error');
-        return;
-    }
+  if (!response.ok) {
+    const text = await response.text();
+    console.error("Server response:", text);
+    alert("Registration failed");
+    return;
+  }
 
-    // Show loading state
-    const btn = document.querySelector('.btn-primary');
-    const originalText = btn.innerHTML;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
-    btn.disabled = true;
-
-    try {
-        console.log(`📤 Sending register request to: ${API}/register/`);
-        
-        const result = await safeFetch(`${API}/register/`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, email, password })
-        });
-
-        if (!result.success) {
-            throw new Error(result.error);
-        }
-
-        showNotification('🎉 Account created successfully! Redirecting to login...', 'success');
-        
-        setTimeout(() => {
-            window.location.href = "/login/";
-        }, 2000);
-
-    } catch (error) {
-        showNotification(error.message, 'error');
-        console.error("Registration error details:", error);
-    } finally {
-        btn.innerHTML = originalText;
-        btn.disabled = false;
-    }
+  // After successful register → go to login
+  window.location.href = "/login/";
 }
+
 
 /* =====================
    LOGIN FUNCTION - BULLETPROOF VERSION
 ===================== */
 async function login() {
-    const username = document.getElementById("login-username").value.trim();
-    const password = document.getElementById("login-password").value;
+  const username = document.getElementById("login-username").value;
+  const password = document.getElementById("login-password").value;
 
-    if (!username || !password) {
-        showNotification('Please enter username and password', 'error');
-        return;
-    }
+  const response = await fetch("/api/login/", {
+    method: "POST",                         // 🔴 REQUIRED
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      username: username,
+      password: password
+    })
+  });
 
-    // Show loading state
-    const btn = document.querySelector('.btn-primary');
-    const originalText = btn.innerHTML;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
-    btn.disabled = true;
+  // 🔴 SAFETY CHECK
+  if (!response.ok) {
+    const text = await response.text();
+    console.error("Server response:", text);
+    alert("Login failed");
+    return;
+  }
 
-    try {
-        console.log(`📤 Sending login request to: ${API}/login/`);
-        
-        const result = await safeFetch(`${API}/login/`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, password })
-        });
+  const data = await response.json();
 
-        if (!result.success) {
-            throw new Error(result.error);
-        }
+  // Save token
+  localStorage.setItem("token", data.token);
 
-        setToken(result.data.token);
-        showNotification('🎉 Welcome back! Redirecting to store...', 'success');
-
-        setTimeout(() => {
-            window.location.href = "/store/";
-        }, 1500);
-
-    } catch (error) {
-        showNotification(error.message, 'error');
-        console.error("Login error details:", error);
-    } finally {
-        btn.innerHTML = originalText;
-        btn.disabled = false;
-    }
+  // Redirect
+  window.location.href = "/store/";
 }
+
 
 /* =====================
    LOGOUT FUNCTION
