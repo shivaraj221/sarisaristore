@@ -1,6 +1,5 @@
 """
-Django settings for main project
-Working version for Render.com
+Django settings for main project - FIXED FOR RENDER
 """
 import os
 from pathlib import Path
@@ -8,8 +7,8 @@ import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Core settings
-SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
+# Core
+SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-secret')
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 # Apps
@@ -29,8 +28,8 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -58,14 +57,27 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'main.wsgi.application'
 
-# Database - SIMPLE VERSION THAT WORKS
-DATABASES = {
-    'default': dj_database_url.config(
-        default='sqlite:///db.sqlite3',
-        conn_max_age=600,
-        ssl_require=not DEBUG
-    )
-}
+# ============================================
+# DATABASE - FIXED FOR RENDER (THIS IS THE KEY)
+# ============================================
+# Force PostgreSQL on Render
+DATABASE_URL = os.environ.get('DATABASE_URL')
+
+if DATABASE_URL:
+    # Render PostgreSQL
+    DATABASES = {
+        'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600)
+    }
+    print("✅ Using PostgreSQL on Render")
+else:
+    # Fallback (should not happen on Render)
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+    print("⚠️  WARNING: Using SQLite - DATABASE_URL not set")
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -91,7 +103,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Security
-ALLOWED_HOSTS = ['*'] if DEBUG else ['.onrender.com', 'localhost']
+ALLOWED_HOSTS = ['*']
 
 # REST Framework
 REST_FRAMEWORK = {
@@ -103,5 +115,5 @@ REST_FRAMEWORK = {
     ],
 }
 
-# CORS - Allow all for now
+# CORS
 CORS_ALLOW_ALL_ORIGINS = True
