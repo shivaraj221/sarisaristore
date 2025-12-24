@@ -5,76 +5,9 @@ services:
     plan: free
     buildCommand: |
       pip install -r requirements.txt
-      python manage.py collectstatic --no-input
-    startCommand: |
-      # Step 1: Run migrations
       python manage.py migrate
-      
-      # Step 2: CREATE SUPERUSER (GUARANTEED TO WORK)
-      python manage.py shell -c "
-      from django.contrib.auth.models import User
-      import os
-      
-      username = 'shiva'
-      email = 'shiva@gmail.com'
-      password = 'Shiva@2025!'  # STRONG PASSWORD THAT WORKS
-      
-      print('=' * 60)
-      print('🔄 CREATING SUPERUSER...')
-      print(f'👤 Username: {username}')
-      print(f'📧 Email: {email}')
-      print('=' * 60)
-      
-      # Check if user already exists
-      existing = User.objects.filter(username=username).first()
-      if existing:
-          print(f'⚠️  User {username} already exists, deleting...')
-          existing.delete()
-      
-      # Create user (bypass Django's password validation)
-      try:
-          # Create user object without saving
-          user = User(
-              username=username,
-              email=email,
-              is_superuser=True,
-              is_staff=True,
-              is_active=True,
-              date_joined='2024-01-01 00:00:00+00:00'
-          )
-          
-          # Set password using set_password (bypasses validation)
-          user.set_password(password)
-          user.save()
-          
-          print('🎉 SUPERUSER CREATED SUCCESSFULLY!')
-          print('👉 Login URL: https://sarisaristore-zt56.onrender.com/admin/')
-          print(f'👉 Username: {username}')
-          print(f'👉 Password: {password}')
-          
-          # Verify the user was created
-          check_user = User.objects.filter(username=username).first()
-          if check_user:
-              print(f'✅ User found in database: {check_user.username}')
-              print(f'✅ Is superuser: {check_user.is_superuser}')
-              print(f'✅ Is staff: {check_user.is_staff}')
-              
-              # Test password
-              if check_user.check_password(password):
-                  print('✅ Password verification: PASS')
-              else:
-                  print('❌ Password verification: FAIL')
-          else:
-              print('❌ User not found in database after creation!')
-              
-      except Exception as e:
-          print(f'❌ ERROR creating user: {str(e)}')
-          import traceback
-          print(traceback.format_exc())
-      "
-      
-      # Step 3: Start the server
-      gunicorn main.wsgi:application
+      python manage.py collectstatic --no-input
+    startCommand: gunicorn main.wsgi:application
     envVars:
       - key: DATABASE_URL
         fromDatabase:
