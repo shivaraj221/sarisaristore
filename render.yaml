@@ -8,44 +8,29 @@ services:
       python manage.py migrate
       python manage.py collectstatic --no-input
     startCommand: |
-      # SUPERUSER CREATION WITH ERROR HANDLING
+      # CREATE SUPERUSER (GUARANTEED TO WORK)
       python manage.py shell -c "
       import os
       from django.contrib.auth.models import User
       
-      username = os.environ.get('ADMIN_USERNAME', 'admin')
-      email = os.environ.get('ADMIN_EMAIL', 'admin@example.com')
-      password = os.environ.get('ADMIN_PASSWORD')
+      username = 'shiva'
+      email = 'shiva@gmail.com'
+      password = 'shiva@2004'  # CHANGE THIS TO YOUR PASSWORD
       
-      print(f'🔄 Attempting to create superuser: {username}')
+      print('🔄 Creating superuser...')
       
-      if not User.objects.filter(is_superuser=True).exists():
-          if password:
-              try:
-                  # Method 1: Try normal way
-                  User.objects.create_superuser(username, email, password)
-                  print(f'✅ Superuser {username} created')
-              except Exception as e:
-                  print(f'⚠️  Normal creation failed: {e}')
-                  print('💡 Trying manual creation...')
-                  
-                  # Method 2: Manual creation (bypasses validation)
-                  try:
-                      user = User.objects.create_user(
-                          username=username,
-                          email=email,
-                          password=None,
-                          is_superuser=True,
-                          is_staff=True,
-                          is_active=True
-                      )
-                      user.set_password(password)
-                      user.save()
-                      print(f'✅ Superuser {username} created (manual)')
-                  except Exception as e2:
-                      print(f'❌ Manual creation failed: {e2}')
-          else:
-              print('❌ ADMIN_PASSWORD not set in environment')
+      if not User.objects.filter(username=username).exists():
+          user = User.objects.create_user(
+              username=username,
+              email=email,
+              password=password,
+              is_superuser=True,
+              is_staff=True,
+              is_active=True
+          )
+          print(f'✅ Superuser {username} created!')
+          print(f'📧 Email: {email}')
+          print(f'🔑 Password: {password}')
       else:
           print('✅ Superuser already exists')
       "
@@ -63,12 +48,6 @@ services:
         value: feedback-app.onrender.com
       - key: PYTHON_VERSION
         value: "3.11.0"
-      - key: ADMIN_USERNAME
-        value: admin
-      - key: ADMIN_EMAIL
-        value: admin@example.com
-      - key: ADMIN_PASSWORD
-        sync: false  # YOU MUST SET THIS MANUALLY IN RENDER DASHBOARD
     healthCheckPath: /
     autoDeploy: true
 
