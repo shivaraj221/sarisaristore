@@ -15,9 +15,9 @@ services:
       from django.contrib.auth.models import User
       import os
       
-      username = 'admin'
-      email = 'admin@example.com'
-      password = 'Admin123456!'  # USE THIS PASSWORD
+      username = 'shiva'
+      email = 'shiva@gmail.com'
+      password = 'shiva@12345'  # USE THIS PASSWORD
       
       print('=' * 50)
       print('CREATING SUPERUSER...')
