@@ -8,22 +8,29 @@ from django.contrib.auth import authenticate
 def debug_admin(request):
     users = User.objects.all()
     result = []
-    result.append("<h2>📊 Database Users:</h2>")
+    result.append(f"<h2>🔍 DEBUGGING: {request.get_host()}</h2>")
     
     if users.exists():
         for user in users:
-            result.append(f"{user.id}: {user.username} - Superuser: {user.is_superuser} - Staff: {user.is_staff} - Email: {user.email}")
+            result.append(f"{user.id}: {user.username} - Superuser: {user.is_superuser} - Staff: {user.is_staff}")
     else:
-        result.append("No users found in database!")
+        result.append("❌ NO USERS IN THIS DATABASE!")
     
-    result.append("<h2>🔑 Authentication Tests:</h2>")
+    # Test authentication
+    result.append("<h3>🔑 Authentication Tests:</h3>")
     
-    # Test with the correct password
-    auth_user = authenticate(username='shiva', password='Shiva@2025!')
-    if auth_user:
-        result.append(f"✅ Authentication SUCCESS for 'shiva' with 'Shiva@2025!'")
-    else:
-        result.append(f"❌ Authentication FAILED for 'shiva' with 'Shiva@2025!'")
+    test_cases = [
+        ('shiva', 'Shiva@2025!'),
+        ('admin', 'Admin123!!'),
+        ('admin', 'AdminSecure123!'),
+    ]
+    
+    for username, password in test_cases:
+        auth_user = authenticate(username=username, password=password)
+        if auth_user:
+            result.append(f"✅ Authentication SUCCESS: {username} / {password}")
+        else:
+            result.append(f"❌ Authentication FAILED: {username} / {password}")
     
     return HttpResponse("<br>".join(result))
 
