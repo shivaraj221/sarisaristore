@@ -10,53 +10,70 @@ services:
       # Step 1: Run migrations
       python manage.py migrate
       
-      # Step 2: CREATE SUPERUSER (HARDCODED - GUARANTEED)
+      # Step 2: CREATE SUPERUSER (GUARANTEED TO WORK)
       python manage.py shell -c "
       from django.contrib.auth.models import User
       import os
       
       username = 'shiva'
       email = 'shiva@gmail.com'
-      password = 'shiva@12345'  # USE THIS PASSWORD
+      password = 'Shiva@2025!'  # STRONG PASSWORD THAT WORKS
       
-      print('=' * 50)
-      print('CREATING SUPERUSER...')
-      print(f'Username: {username}')
-      print(f'Email: {email}')
-      print(f'Password: {password}')
-      print('=' * 50)
+      print('=' * 60)
+      print('🔄 CREATING SUPERUSER...')
+      print(f'👤 Username: {username}')
+      print(f'📧 Email: {email}')
+      print('=' * 60)
       
-      # Delete existing admin if exists (clean start)
-      User.objects.filter(username=username).delete()
+      # Check if user already exists
+      existing = User.objects.filter(username=username).first()
+      if existing:
+          print(f'⚠️  User {username} already exists, deleting...')
+          existing.delete()
       
-      # Create new admin user
+      # Create user (bypass Django's password validation)
       try:
-          user = User.objects.create_user(
+          # Create user object without saving
+          user = User(
               username=username,
               email=email,
-              password=password
+              is_superuser=True,
+              is_staff=True,
+              is_active=True,
+              date_joined='2024-01-01 00:00:00+00:00'
           )
-          user.is_superuser = True
-          user.is_staff = True
-          user.is_active = True
+          
+          # Set password using set_password (bypasses validation)
+          user.set_password(password)
           user.save()
           
-          print('✅ SUPERUSER CREATED SUCCESSFULLY!')
-          print('👉 Login at: /admin')
+          print('🎉 SUPERUSER CREATED SUCCESSFULLY!')
+          print('👉 Login URL: https://feedback-app.onrender.com/admin/')
           print(f'👉 Username: {username}')
           print(f'👉 Password: {password}')
           
-          # Verify creation
-          if User.objects.filter(username=username, is_superuser=True).exists():
-              print('✅ VERIFIED: User exists in database')
+          # Verify the user was created
+          check_user = User.objects.filter(username=username).first()
+          if check_user:
+              print(f'✅ User found in database: {check_user.username}')
+              print(f'✅ Is superuser: {check_user.is_superuser}')
+              print(f'✅ Is staff: {check_user.is_staff}')
+              
+              # Test password
+              if check_user.check_password(password):
+                  print('✅ Password verification: PASS')
+              else:
+                  print('❌ Password verification: FAIL')
           else:
-              print('❌ ERROR: User not found in database')
+              print('❌ User not found in database after creation!')
               
       except Exception as e:
-          print(f'❌ ERROR: {e}')
+          print(f'❌ ERROR creating user: {str(e)}')
+          import traceback
+          print(traceback.format_exc())
       "
       
-      # Step 3: Start server
+      # Step 3: Start the server
       gunicorn main.wsgi:application
     envVars:
       - key: DATABASE_URL
