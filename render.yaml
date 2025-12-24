@@ -5,35 +5,58 @@ services:
     plan: free
     buildCommand: |
       pip install -r requirements.txt
-      python manage.py migrate
       python manage.py collectstatic --no-input
     startCommand: |
-      # CREATE SUPERUSER (GUARANTEED TO WORK)
+      # Step 1: Run migrations
+      python manage.py migrate
+      
+      # Step 2: CREATE SUPERUSER (HARDCODED - GUARANTEED)
       python manage.py shell -c "
-      import os
       from django.contrib.auth.models import User
+      import os
       
-      username = 'shiva'
-      email = 'shiva@gmail.com'
-      password = 'shiva@2004'  # CHANGE THIS TO YOUR PASSWORD
+      username = 'admin'
+      email = 'admin@example.com'
+      password = 'Admin123456!'  # USE THIS PASSWORD
       
-      print('🔄 Creating superuser...')
+      print('=' * 50)
+      print('CREATING SUPERUSER...')
+      print(f'Username: {username}')
+      print(f'Email: {email}')
+      print(f'Password: {password}')
+      print('=' * 50)
       
-      if not User.objects.filter(username=username).exists():
+      # Delete existing admin if exists (clean start)
+      User.objects.filter(username=username).delete()
+      
+      # Create new admin user
+      try:
           user = User.objects.create_user(
               username=username,
               email=email,
-              password=password,
-              is_superuser=True,
-              is_staff=True,
-              is_active=True
+              password=password
           )
-          print(f'✅ Superuser {username} created!')
-          print(f'📧 Email: {email}')
-          print(f'🔑 Password: {password}')
-      else:
-          print('✅ Superuser already exists')
+          user.is_superuser = True
+          user.is_staff = True
+          user.is_active = True
+          user.save()
+          
+          print('✅ SUPERUSER CREATED SUCCESSFULLY!')
+          print('👉 Login at: /admin')
+          print(f'👉 Username: {username}')
+          print(f'👉 Password: {password}')
+          
+          # Verify creation
+          if User.objects.filter(username=username, is_superuser=True).exists():
+              print('✅ VERIFIED: User exists in database')
+          else:
+              print('❌ ERROR: User not found in database')
+              
+      except Exception as e:
+          print(f'❌ ERROR: {e}')
       "
+      
+      # Step 3: Start server
       gunicorn main.wsgi:application
     envVars:
       - key: DATABASE_URL
