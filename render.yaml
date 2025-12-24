@@ -48,7 +48,7 @@ services:
           user.save()
           
           print('🎉 SUPERUSER CREATED SUCCESSFULLY!')
-          print('👉 Login URL: https://feedback-app.onrender.com/admin/')
+          print('👉 Login URL: https://sarisaristore-zt56.onrender.com/admin/')
           print(f'👉 Username: {username}')
           print(f'👉 Password: {password}')
           
