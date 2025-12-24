@@ -16,9 +16,5 @@ urlpatterns = [
     # 🔴 ADD THIS LINE
     path("view-admin-users/", view_admin_users),
 
-    # Frontend pages
-    path("", TemplateView.as_view(template_name="index.html"), name="home"),
-    path("login/", TemplateView.as_view(template_name="login.html"), name="login"),
-    path("register/", TemplateView.as_view(template_name="register.html"), name="register"),
-    path("store/", TemplateView.as_view(template_name="store.html"), name="store"),
+    path("", include("core.urls")),  # or your TemplateViews
 ]
