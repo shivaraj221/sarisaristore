@@ -1,18 +1,30 @@
 services:
   - type: web
-    name: sarisari-store
-    env: python
+    name: feedback-app
+    runtime: python
     plan: free
     buildCommand: |
-      chmod +x render_build.sh
-      ./render_build.sh
-    startCommand: gunicorn main.wsgi:application --bind 0.0.0.0:$PORT
+      pip install -r requirements.txt
+      python manage.py migrate
+      python manage.py collectstatic --no-input
+    startCommand: gunicorn main.wsgi:application
     envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: feedback-db
+          property: connectionString
       - key: SECRET_KEY
         generateValue: true
       - key: DEBUG
-        value: "True"
-      - key: DATABASE_URL
-        fromDatabase:
-          name: sari-sari-db
-          property: connectionString
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: feedback-app.onrender.com
+      - key: PYTHON_VERSION
+        value: "3.11.0"
+    healthCheckPath: /
+    autoDeploy: true
+
+databases:
+  - name: feedback-db
+    databaseName: feedback-db
+    plan: free
