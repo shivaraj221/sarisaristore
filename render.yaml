@@ -5,9 +5,21 @@ services:
     plan: free
     buildCommand: |
       pip install -r requirements.txt
-      python manage.py migrate
+      python manage.py migrate  # KEEP THIS
       python manage.py collectstatic --no-input
-    startCommand: gunicorn main.wsgi:application
+    startCommand: |
+      # Add superuser creation here
+      python manage.py shell -c "
+      import os
+      from django.contrib.auth.models import User
+      if not User.objects.filter(is_superuser=True).exists():
+          User.objects.create_superuser(
+              os.environ.get('ADMIN_USERNAME', 'admin'),
+              os.environ.get('ADMIN_EMAIL', 'admin@example.com'),
+              os.environ.get('ADMIN_PASSWORD', 'YourSecurePassword123')
+          )
+      "
+      gunicorn main.wsgi:application
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -21,6 +33,13 @@ services:
         value: feedback-app.onrender.com
       - key: PYTHON_VERSION
         value: "3.11.0"
+      # ADD ONLY THESE 3 LINES:
+      - key: ADMIN_USERNAME
+        value: admin
+      - key: ADMIN_EMAIL
+        value: admin@example.com
+      - key: ADMIN_PASSWORD
+        sync: false
     healthCheckPath: /
     autoDeploy: true
 
