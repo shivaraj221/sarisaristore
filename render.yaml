@@ -5,19 +5,49 @@ services:
     plan: free
     buildCommand: |
       pip install -r requirements.txt
-      python manage.py migrate  # KEEP THIS
+      python manage.py migrate
       python manage.py collectstatic --no-input
     startCommand: |
-      # Add superuser creation here
+      # SUPERUSER CREATION WITH ERROR HANDLING
       python manage.py shell -c "
       import os
       from django.contrib.auth.models import User
+      
+      username = os.environ.get('ADMIN_USERNAME', 'admin')
+      email = os.environ.get('ADMIN_EMAIL', 'admin@example.com')
+      password = os.environ.get('ADMIN_PASSWORD')
+      
+      print(f'🔄 Attempting to create superuser: {username}')
+      
       if not User.objects.filter(is_superuser=True).exists():
-          User.objects.create_superuser(
-              os.environ.get('ADMIN_USERNAME', 'admin'),
-              os.environ.get('ADMIN_EMAIL', 'admin@example.com'),
-              os.environ.get('ADMIN_PASSWORD', 'YourSecurePassword123')
-          )
+          if password:
+              try:
+                  # Method 1: Try normal way
+                  User.objects.create_superuser(username, email, password)
+                  print(f'✅ Superuser {username} created')
+              except Exception as e:
+                  print(f'⚠️  Normal creation failed: {e}')
+                  print('💡 Trying manual creation...')
+                  
+                  # Method 2: Manual creation (bypasses validation)
+                  try:
+                      user = User.objects.create_user(
+                          username=username,
+                          email=email,
+                          password=None,
+                          is_superuser=True,
+                          is_staff=True,
+                          is_active=True
+                      )
+                      user.set_password(password)
+                      user.save()
+                      print(f'✅ Superuser {username} created (manual)')
+                  except Exception as e2:
+                      print(f'❌ Manual creation failed: {e2}')
+          else:
+              print('❌ ADMIN_PASSWORD not set in environment')
+      else:
+          print('✅ Superuser already exists')
       "
       gunicorn main.wsgi:application
     envVars:
@@ -33,13 +63,12 @@ services:
         value: feedback-app.onrender.com
       - key: PYTHON_VERSION
         value: "3.11.0"
-      # ADD ONLY THESE 3 LINES:
       - key: ADMIN_USERNAME
         value: admin
       - key: ADMIN_EMAIL
         value: admin@example.com
       - key: ADMIN_PASSWORD
-        sync: false
+        sync: false  # YOU MUST SET THIS MANUALLY IN RENDER DASHBOARD
     healthCheckPath: /
     autoDeploy: true
 
