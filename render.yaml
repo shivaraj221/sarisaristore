@@ -7,6 +7,7 @@ services:
       pip install -r requirements.txt
       python manage.py migrate
       python manage.py collectstatic --no-input
+      python manage.py create_admin  # ← Add this line
     startCommand: gunicorn main.wsgi:application
     envVars:
       - key: DATABASE_URL
@@ -17,10 +18,14 @@ services:
         generateValue: true
       - key: DEBUG
         value: "False"
-      - key: ALLOWED_HOSTS
-        value: feedback-app.onrender.com
       - key: PYTHON_VERSION
         value: "3.11.0"
+      - key: ADMIN_USERNAME
+        value: admin
+      - key: ADMIN_PASSWORD
+        value: YourSecurePassword123!
+      - key: ADMIN_EMAIL
+        value: admin@example.com
     healthCheckPath: /
     autoDeploy: true
 
