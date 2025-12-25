@@ -142,14 +142,3 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # =========================
 # SUPERUSER CREATION (ADD ONLY THIS BLOCK)
 # =========================
-try:
-    from django.contrib.auth.models import User
-    if not User.objects.filter(is_superuser=True).exists():
-        if os.environ.get('ADMIN_USERNAME') and os.environ.get('ADMIN_PASSWORD'):
-            User.objects.create_superuser(
-                os.environ['ADMIN_USERNAME'],
-                os.environ.get('ADMIN_EMAIL', 'admin@example.com'),
-                os.environ['ADMIN_PASSWORD']
-            )
-except:
-    pass
