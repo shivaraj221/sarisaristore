@@ -1,445 +1,164 @@
-# 🏪 SariSari Store – Django Web Application
+# **🏪 Sari-Sari Store Management System**
 
-A full-stack Django web application designed for managing a Sari-Sari store. The project includes backend logic, frontend templates, static assets, custom Django commands, background tasks, and production-ready deployment configuration.
-
----
-
-## 📋 Table of Contents
-
-| Section | Description |
-|---------|-------------|
-| [Project Overview](#-project-overview) | Brief introduction to the application |
-| [Features](#-features) | Key functionalities |
-| [Technology Stack](#-technology-stack) | Tools and technologies used |
-| [Project Structure](#-project-structure) | Complete folder and file layout |
-| [Folder & File Explanation](#-folder--file-explanation) | Detailed explanation of each component |
-| [Application Architecture](#-application-architecture) | System design overview |
-| [Request Flow](#-request-flow) | How requests are processed |
-| [Installation & Setup](#-installation--setup) | Local development setup |
-| [Environment Configuration](#-environment-configuration) | Environment variables setup |
-| [Database & Migrations](#-database--migrations) | Database configuration |
-| [Admin Management](#-admin-management) | Django admin setup |
-| [Static Files](#-static-files) | CSS, JS, and image handling |
-| [Templates](#-templates) | HTML template structure |
-| [Custom Commands](#-custom-commands) | Django management commands |
-| [Background Tasks](#-background-tasks) | Asynchronous task processing |
-| [Deployment (Render)](#-deployment-render) | Production deployment guide |
-| [Security Guidelines](#-security-guidelines) | Security best practices |
-| [Future Improvements](#-future-improvements) | Planned features |
-| [License](#-license) | Licensing information |
+A full-stack Django web application for managing a Sari-Sari store with customer feedback capabilities.
 
 ---
 
-## 🎯 Project Overview
+## **📋 Table of Contents**
 
-This application is built using Django and follows a clean modular architecture.
-
-It demonstrates:
-- ✅ Separation of project and app structure
-- ✅ Template-based frontend rendering
-- ✅ Static file management
-- ✅ Background task execution
-- ✅ Custom Django management commands
-- ✅ Production deployment using Render
-
----
-
-## ✨ Features
-
-| Feature | Description |
-|---------|-------------|
-| 👥 **User Management** | User registration and login system |
-| 🛒 **Store Interface** | Complete store page with product management |
-| ⚙️ **Admin Dashboard** | Django admin interface for store management |
-| 🏗️ **Modular Backend** | Clean, organized backend structure |
-| 🔧 **Custom Commands** | Django management commands for admin tasks |
-| ⚡ **Background Tasks** | Asynchronous task processing support |
-| 🚀 **Production Ready** | Ready-to-deploy configuration for Render |
+- Overview  
+- Features  
+- Technology Stack  
+- Project Structure  
+- Installation & Setup  
+- Usage  
+- Deployment  
+- License
 
 ---
 
-## 🛠️ Technology Stack
+## **📖 Overview**
 
-| Category | Technology |
-|----------|------------|
-| **Backend Framework** | Django (Python) |
-| **Frontend** | HTML, CSS, JavaScript |
-| **Database (Dev)** | SQLite |
-| **Database (Prod)** | PostgreSQL |
-| **WSGI Server** | Gunicorn |
-| **Deployment** | Render |
-| **Version Control** | Git |
-| **Task Queue** | Django Background Tasks |
+A complete Sari-Sari Store management system where:
+- Store owner manages products
+- Customers register and login
+- Customers view all store products
+- Customers submit feedback
+- All feedbacks are displayed with JavaScript
+- Admin manages everything via dashboard
 
 ---
 
-## 📁 Project Structure
+## **✨ Features**
+
+**Store Management:**
+- ✅ Product catalog management
+- ✅ Customer registration system
+- ✅ Customer login system
+- ✅ Store interface display
+
+**Customer Features:**
+- ✅ View all store products
+- ✅ Submit product feedback
+- ✅ See all feedbacks dynamically with JavaScript
+
+**Admin Features:**
+- ✅ Django admin dashboard
+- ✅ View registered customers
+- ✅ Monitor all feedbacks
+- ✅ AI sentiment analysis on feedbacks
+
+**Technical Features:**
+- ✅ Background task processing
+- ✅ Custom admin creation command
+- ✅ Ready for Render deployment
+
+---
+
+## **🛠️ Technology Stack**
+
+**Backend:** Django (Python)  
+**Frontend:** HTML, CSS, JavaScript  
+**Database:** SQLite (Development), PostgreSQL (Production)  
+**Server:** Gunicorn  
+**Deployment:** Render  
+**Version Control:** Git
+
+---
+
+## **📁 Project Structure**
 
 ```
-sarisari_store/
-├── 📁 sarisari_store/          # Main project directory
-│   ├── 📁 __pycache__/
-│   ├── 📄 __init__.py
-│   ├── 📄 asgi.py
-│   ├── 📄 settings.py          # Project settings
-│   ├── 📄 urls.py              # Main URL routing
-│   └── 📄 wsgi.py
+sarisaristore-main/
+│   manage.py
+│   requirements.txt
+│   Procfile
+│   render.yaml
 │
-├── 📁 store/                   # Main Django app
-│   ├── 📁 __pycache__/
-│   ├── 📁 migrations/
-│   ├── 📁 static/
-│   │   └── 📁 store/          # CSS, JS, images
-│   ├── 📁 templates/
-│   │   └── 📁 store/          # HTML templates
-│   ├── 📄 __init__.py
-│   ├── 📄 admin.py            # Admin configuration
-│   ├── 📄 apps.py
-│   ├── 📄 models.py           # Database models
-│   ├── 📄 tasks.py            # Background tasks
-│   ├── 📄 tests.py
-│   ├── 📄 urls.py             # App URL routing
-│   └── 📄 views.py            # View logic
+├───core/                     # Main store application
+│   │   models.py            # Database models (Products, Customers, Feedback)
+│   │   views.py             # Business logic
+│   │   admin.py             # Admin interface
+│   │   tasks.py             # Background tasks
+│   │   utils.py             # Utility functions
+│   │   debug.py             # Debug tools
+│   │   serializers.py       # API serializers
+│   │   urls.py              # App URLs
+│   │
+│   ├───management/commands/
+│   │       create_admin.py  # Custom admin command
+│   │
+│   └───migrations/         # Database migrations
 │
-├── 📁 utils/                   # Utility functions
-│   └── 📄 helpers.py
+├───main/                   # Project settings
+│       settings.py
+│       urls.py
+│       wsgi.py
+│       asgi.py
 │
-├── 📁 scripts/                 # Custom scripts
-│   └── 📄 create_admin.py
+├───static/                # Frontend assets
+│       app.js            # JavaScript for store and feedback display
+│       style.css         # Store styling
 │
-├── 📁 manage.py                # Django management
-├── 📄 requirements.txt         # Python dependencies
-├── 📄 runtime.txt              # Python runtime version
-├── 📄 Procfile                 # Render deployment config
-├── 📄 build.sh                 # Build script
-├── 📄 .env.example             # Environment template
-├── 📄 .gitignore               # Git ignore rules
-└── 📄 README.md                # This documentation
+└───templates/            # HTML pages
+        index.html        # Store homepage
+        login.html        # Customer login
+        register.html     # Customer registration
+        store.html        # Products display & feedback
 ```
 
 ---
 
-## 📄 Folder & File Explanation
+## **⚙️ Installation & Setup**
 
-| File/Folder | Purpose |
-|-------------|---------|
-| **sarisari_store/** | Main Django project directory |
-| **store/** | Main application directory |
-| **store/static/** | CSS, JavaScript, images |
-| **store/templates/** | HTML templates |
-| **store/migrations/** | Database migration files |
-| **store/models.py** | Database models definition |
-| **store/views.py** | Request handling logic |
-| **store/urls.py** | URL routing for the app |
-| **store/admin.py** | Django admin configuration |
-| **store/tasks.py** | Background task definitions |
-| **utils/** | Helper functions and utilities |
-| **scripts/** | Custom Python scripts |
-| **requirements.txt** | Python package dependencies |
-| **Procfile** | Render process configuration |
-| **build.sh** | Build script for deployment |
-| **.env.example** | Environment variables template |
-
----
-
-## 🏗️ Application Architecture
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                    User Interface                        │
-│                    (HTML/CSS/JS)                        │
-└───────────────┬─────────────────────────────────────────┘
-                │
-                ▼
-┌─────────────────────────────────────────────────────────┐
-│                    Django Views                          │
-│              (Business Logic Layer)                      │
-└───────────────┬─────────────────────────────────────────┘
-                │
-                ▼
-┌─────────────────────────────────────────────────────────┐
-│                  Django Models                           │
-│              (Database Interaction)                      │
-└───────────────┬─────────────────────────────────────────┘
-                │
-                ▼
-┌─────────────────────────────────────────────────────────┐
-│                     Database                             │
-│               (SQLite/PostgreSQL)                       │
-└─────────────────────────────────────────────────────────┘
-```
-
----
-
-## 🔄 Request Flow
-
-```
-1. User Request → 2. URL Routing → 3. View Processing → 4. Database Query
-       ↓               ↓                 ↓                 ↓
-    Browser        urls.py            views.py         models.py
-       ↓               ↓                 ↓                 ↓
-8. Response ← 7. Template Render ← 6. Data Processing ← 5. Query Results
-```
-
----
-
-## ⚙️ Installation & Setup
-
-### Step 1: Clone Repository
 ```bash
-git clone https://github.com/yourusername/sarisari-store.git
-cd sarisari-store
-```
-
-### Step 2: Create Virtual Environment
-```bash
-python -m venv venv
-
-# Windows
-venv\Scripts\activate
-
-# Mac/Linux
-source venv/bin/activate
-```
-
-### Step 3: Install Dependencies
-```bash
+# 1. Install dependencies
 pip install -r requirements.txt
-```
 
-### Step 4: Configure Environment
-```bash
-cp .env.example .env
-# Edit .env with your configuration
-```
-
-### Step 5: Run Migrations
-```bash
-python manage.py makemigrations
+# 2. Apply migrations
 python manage.py migrate
-```
 
-### Step 6: Create Admin User
-```bash
-python manage.py createsuperuser
-# OR use custom script
-python scripts/create_admin.py
-```
+# 3. Create store admin
+python manage.py create_admin
 
-### Step 7: Run Development Server
-```bash
+# 4. Run server
 python manage.py runserver
 ```
-Access at: `http://localhost:8000`
+
+Visit: http://localhost:8000
 
 ---
 
-## 🔧 Environment Configuration
+## **🎯 How It Works**
 
-Create `.env` file with:
-
-```env
-# Django Settings
-SECRET_KEY=your-secret-key-here
-DEBUG=True
-ALLOWED_HOSTS=localhost,127.0.0.1
-
-# Database
-DB_NAME=sarisari_store
-DB_USER=postgres
-DB_PASSWORD=your-password
-DB_HOST=localhost
-DB_PORT=5432
-
-# Production Settings
-PRODUCTION=False
-```
+1. **Store Setup** → Admin adds products to catalog
+2. **Customer Registration** → Customers sign up via `register.html`
+3. **Customer Login** → Customers login via `login.html`  
+4. **View Store** → Customers see all products in `store.html`
+5. **Submit Feedback** → Customers submit feedback on products
+6. **View Feedbacks** → JavaScript in `app.js` shows all feedbacks dynamically
+7. **Admin Management** → Store owner manages everything at `/admin`
 
 ---
 
-## 🗄️ Database & Migrations
+## **🚀 Deployment to Render**
 
-| Command | Description |
-|---------|-------------|
-| `makemigrations` | Create new migrations |
-| `migrate` | Apply migrations to database |
-| `showmigrations` | List all migrations |
-| `sqlmigrate` | Show SQL for migration |
-| `dbshell` | Open database shell |
+1. Push code to GitHub
+2. Create Web Service on Render
+3. Connect repository
+4. Add environment variables:
+   - `SECRET_KEY`
+   - `DEBUG=False`
+   - `DATABASE_URL`
 
-**Reset Database:**
-```bash
-# Delete database
-rm db.sqlite3
-
-# Recreate migrations
-python manage.py makemigrations
-python manage.py migrate
-```
+Configuration files included: `Procfile`, `render.yaml`, `runtime.txt`
 
 ---
 
-## 👑 Admin Management
+## **📝 License**
 
-### Default Admin
-```bash
-python manage.py createsuperuser
-```
-
-### Custom Admin Command
-```bash
-python scripts/create_admin.py
-```
-
-### Admin URL
-```
-http://localhost:8000/admin/
-```
+MIT License
 
 ---
 
-## 🎨 Static Files
-
-| Type | Location | Description |
-|------|----------|-------------|
-| CSS | `store/static/store/css/` | Stylesheets |
-| JS | `store/static/store/js/` | JavaScript files |
-| Images | `store/static/store/images/` | Product images, icons |
-
-**Collect Static Files (Production):**
-```bash
-python manage.py collectstatic
-```
-
----
-
-## 📝 Templates
-
-| Template | Purpose |
-|----------|---------|
-| `base.html` | Base template with layout |
-| `index.html` | Home page |
-| `store.html` | Main store interface |
-| `login.html` | User login page |
-| `register.html` | User registration page |
-
----
-
-## ⚙️ Custom Commands
-
-### Create Admin Script
-```python
-# scripts/create_admin.py
-from django.contrib.auth import get_user_model
-
-User = get_user_model()
-User.objects.create_superuser(
-    username='admin',
-    email='admin@sarisari.com',
-    password='admin123'
-)
-```
-
-Run with:
-```bash
-python scripts/create_admin.py
-```
-
----
-
-## ⚡ Background Tasks
-
-### Task Definition
-```python
-# store/tasks.py
-from background_task import background
-
-@background(schedule=60)
-def process_order(order_id):
-    # Process order logic
-    pass
-```
-
-### Run Task Worker
-```bash
-python manage.py process_tasks
-```
-
----
-
-## 🚀 Deployment (Render)
-
-### 1. Connect Repository
-- Connect your GitHub repository to Render
-
-### 2. Configure Environment
-| Variable | Value |
-|----------|-------|
-| `SECRET_KEY` | Random secret key |
-| `DEBUG` | False |
-| `ALLOWED_HOSTS` | your-app.onrender.com |
-| `DATABASE_URL` | Postgres URL from Render |
-
-### 3. Build & Deploy
-Render will automatically:
-- Install dependencies from `requirements.txt`
-- Run `build.sh`
-- Apply migrations
-- Collect static files
-- Start Gunicorn server
-
-### 4. Manual Deployment
-```bash
-# Build
-./build.sh
-
-# Start server
-gunicorn sarisari_store.wsgi:application
-```
-
----
-
-## 🔒 Security Guidelines
-
-| Security Measure | Implementation |
-|-----------------|----------------|
-| **Secret Key** | Use environment variable |
-| **Debug Mode** | Disable in production |
-| **HTTPS** | Enable SSL in production |
-| **CSRF Protection** | Enabled by default |
-| **XSS Protection** | Django templates escape HTML |
-| **SQL Injection** | Use Django ORM queries |
-| **Password Hashing** | Django's PBKDF2 by default |
-
----
-
-## 🔮 Future Improvements
-
-| Feature | Priority | Status |
-|---------|----------|--------|
-| Inventory Management | 🔴 High | Planned |
-| Sales Reporting | 🟡 Medium | Planned |
-| Customer Accounts | 🟡 Medium | Planned |
-| Barcode Scanning | 🔵 Low | Future |
-| Mobile App | 🔵 Low | Future |
-| Payment Integration | 🟡 Medium | Planned |
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-<div align="center">
-
-### ⭐ **Support the Project**
-
-If you find this project useful, please give it a star!
-
-[![GitHub stars](https://img.shields.io/github/stars/yourusername/sarisari-store?style=social)](https://github.com/yourusername/sarisari-store)
-
-**Happy Coding!** 🚀
-
-</div>
+**Your Sari-Sari Store management system is ready!** 🏪
