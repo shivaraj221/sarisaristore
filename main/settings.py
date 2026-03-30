@@ -114,9 +114,7 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # =========================
 # SECURITY
 # =========================
-ALLOWED_HOSTS = [
-    "sarisaristore-zt56.onrender.com",
-]
+ALLOWED_HOSTS = ["*"]
 
 # =========================
 # DJANGO REST FRAMEWORK
